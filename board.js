@@ -19,12 +19,12 @@ class Board {
         
         for (var x = 0; x < size_x; x++) {
             for (var y = 0; y < size_y; y++) {
-                this.grid.push(0);
+                this.grid.push(new Cell(x, y, false, 0));
             }
         }
 
         for (var i = 0; i < mines; i++) {
-            this.grid[i] = false;
+            this.grid[i].mine = true;
         }
 
         this.grid = shuffle(this.grid);
@@ -43,7 +43,10 @@ class Board {
                         {x: x + 1, y: y + 1}
                     ];
                     for (var i = 0; i < surround.length; i++) {
-                        if (this.get(surround[i].x, surround[i].y).mine === true) {
+                        if (surround[i].x >= 0 && surround[i].x < this.size_x &&
+                            surround[i].y >= 0 && surround[i].y < this.size_y &&
+                            this.get(surround[i].x, surround[i].y).mine === true) {
+
                             this.get(x, y).value++;
                         }
                     }
@@ -56,13 +59,13 @@ class Board {
         return this.grid[y * (this.size_x) + x];
     }
 
-    set(x, y, value) {
-        this.grid[y * (this.size_x) + x] = value;
-    }
-    
     reveal(x, y) {
         this.get(x, y).revealed = true;
-        if (this.get(x, y).value === 0) {
+        if (this.get(x, y).mine === true) {
+            for (var i = 0; i < this.grid.length; i++) {
+                this.grid[i].revealed = true;
+            }
+        } else if (this.get(x, y).value === 0) {
             var surround = [
                 {x: x - 1, y: y - 1},
                 {x: x,     y: y - 1},

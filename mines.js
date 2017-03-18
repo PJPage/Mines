@@ -1,12 +1,13 @@
 var c;
 var ctx;
 var cell_size = 20;
+var board = new Board(10, 10, 10);
 
 window.onload = function() {
     c = document.getElementById("canvas");
     ctx = c.getContext("2d");
 
-    board = new Board(10, 10, 10);
+    board = new Board(9, 9, 10);
 
     c.width = board.size_x * cell_size;
     c.height = board.size_y * cell_size;
@@ -29,12 +30,16 @@ window.onload = function() {
     window.requestAnimationFrame(draw);
 };
 
-function draw(board) {
+function newGame() {
+    board = new Board(9, 9, 10);
+}
+
+function draw() {
 
     // draw cells
     for (var y = 0; y < board.size_y; y++) {
         for (var x = 0; x < board.size_x; x++) {
-            drawCell(board, x, y);
+            drawCell(x, y);
         }
     }
 
@@ -50,9 +55,10 @@ function draw(board) {
             ctx.stroke();
         }
     }
+    window.requestAnimationFrame(draw);
 }
 
-function drawCell(board, x, y) {
+function drawCell(x, y) {
     center_x = x * cell_size + cell_size / 2;
     center_y = y * cell_size + cell_size / 2;
 
@@ -78,10 +84,10 @@ function drawCell(board, x, y) {
         ctx.fill();
     } else {
         var colors = ["white", "blue", "green", "red", "purple", "maroon", "teal", "black", "gray"];
-        ctx.fillStyle = colors[board.get(x, y)];
+        ctx.fillStyle = colors[board.get(x, y).value];
         ctx.font = cell_size - 5 + "px sans";
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
-        ctx.fillText(board.get(x, y), center_x, center_y);
+        ctx.fillText(board.get(x, y).value, center_x, center_y);
     }
 }

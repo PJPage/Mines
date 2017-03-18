@@ -1,8 +1,8 @@
 class Cell {
-    constructor(x, y, bomb, value) {
+    constructor(x, y, mine, value) {
         this.x = x;
         this.y = y;
-        this.bomb = bomb;
+        this.mine = mine;
         this.value = value;
         this.revealed = false;
         this.flagged = false;
